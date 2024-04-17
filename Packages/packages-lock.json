@@ -9,20 +9,6 @@
       },
       "hash": "c9e06b15391449ad42fd9b0f39fea48054751bcd"
     },
-    "com.unity.addressables": {
-      "version": "1.21.19",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.scriptablebuildpipeline": "1.21.21",
-        "com.unity.modules.assetbundle": "1.0.0",
-        "com.unity.modules.imageconversion": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.collab-proxy": {
       "version": "2.3.1",
       "depth": 0,
@@ -97,13 +83,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.scriptablebuildpipeline": {
-      "version": "1.21.21",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.unity.settings-manager": {
       "version": "2.0.1",
       "depth": 2,
@@ -171,39 +150,6 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
-    },
-    "com.vrglass.chatsystem": {
-      "version": "0.0.23",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://verdaccio.ftp.vrglass.com"
-    },
-    "com.vrglass.devkit": {
-      "version": "0.0.96",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.addressables": "1.19.19"
-      },
-      "url": "https://verdaccio.ftp.vrglass.com"
-    },
-    "com.vrglass.notifysystem": {
-      "version": "0.0.37",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.vrglass.devkit": "0.0.69",
-        "com.itisnajim.socketiounity": "1.1.4"
-      },
-      "url": "https://verdaccio.ftp.vrglass.com"
-    },
-    "com.vrglass.socketio": {
-      "version": "0.0.9",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://verdaccio.ftp.vrglass.com"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

@@ -1,15 +1,12 @@
-using NotificationSystem;
 using SocketIOClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
-using VRGlass.Essentials.Http;
-using VRGlass.SocketIO.Data;
-using VRGlass.SocketIO;
+using SocketIOClient.Newtonsoft.Json;
+using Newtonsoft.Json;
+using static ConectionManager.SocketIOConnection;
 
 public class ConectionManager : MonoBehaviour
 {
@@ -24,10 +21,10 @@ public class ConectionManager : MonoBehaviour
     public string username;
     public string token;
 
-    private NotificationManager _NotificationManager = new();
-    private ChatManager _ChatManager = new();
-    private ISocketConnection _connection;
+    private SocketIOConnection _connection;
 
+    public SocketIOUnity _socket;
+    private Dictionary<string, Action<SocketIOResponse>> _callbacks = new Dictionary<string, Action<SocketIOResponse>>();
 
 
     private void Start()
@@ -40,8 +37,13 @@ public class ConectionManager : MonoBehaviour
         if (_connection != null)
             Debug.Log(_connection.IsConnected());
 
-        _ChatManager.RunFixedUpdate();
+        if (_connection != null)
+        {
+            ChangeText();
+
+        }
     }
+
     public IEnumerator Conected()
     {
         IdentifyData identifyData = new()
@@ -54,71 +56,37 @@ public class ConectionManager : MonoBehaviour
         //Uri uri = new Uri("https://chat-atvos.virtual.town/");
         Uri uri = new Uri("https://chat-vt16.virtual.town/");
 
-        SocketOptions options = new SocketOptions(uri, identifyData);
+        SocketIOConnection.SocketOptions options = new SocketIOConnection.SocketOptions(uri, identifyData);
 
-        _connection = new SocketIOConnection();
-        _NotificationManager.Initialize(_connection, options, new HttpRequest.HttpOptions("pt-br", token));
+        _connection = new ConectionManager.SocketIOConnection();
         yield return new WaitForSeconds(0.1f);
-        _connection.Conect(options);
+        _connection.Conected(options);
         yield return new WaitForSeconds(0.1f);
-        _connection.AddDictionaryCallback(_NotificationManager.GetCallbacks());
+        AddCallbacks("message", RecebidoMessage);
+        _connection.AddDictionaryCallback(_callbacks);
         yield return new WaitForSeconds(0.1f);
-
-        _ChatManager.Initialize(_connection, new Dictionary<string, Action<SocketIOResponse>>());
-        _ChatManager.MessageChatCallback += RecebidoMessage;
-        _ChatManager.UpdateListUsersChatCallback += RecebidoListUsers;
-        _ChatManager.UserConnectedCallback += RecebidoUserConected;
-        _ChatManager.UserDisconnectedCallback += RecebidoUserDisconected;
-
-        yield return new WaitForSeconds(0.1f);
-
-        _connection.AddDictionaryCallback(_ChatManager.GetCallbacks());
-
-
-        yield return new WaitForSeconds(0.1f);
-        _ChatManager.JoinRoom("ola", 230);
-
-
-        yield return new WaitForSeconds(0.1f);
-        Debug.Log(_ChatManager.ListUsers.Count);
-
         isConectVerific = true;
 
     }
-
-
-    public void RecebidoMessage(MessageDataChat messageData)
+    private void AddCallbacks(string nameCallback, Action<SocketIOResponse> action)
     {
-        textChat.text += messageData.Message;
-        Debug.Log(messageData);
-        Debug.Log("Recebido :" + messageData.Message);
+        if (_callbacks.ContainsKey(nameCallback))
+        {
+            _callbacks[nameCallback] += action;
+        }
+        else
+        {
+            _callbacks.Add(nameCallback, action);
+        }
     }
 
-    public void RecebidoListUsers(List<UserChat> users)
+    public void RecebidoMessage(SocketIOResponse response)
     {
-        users.ForEach(x => Debug.Log("Users : " + x.Name));
+        Debug.Log(response);
     }
-
-    public void RecebidoUserConected(User user)
+    public void LeaveRoom()
     {
-        Debug.Log(user);
-
-    }
-
-    public void RecebidoUserDisconected(User user)
-    {
-        Debug.Log(user);
-
-    }
-
-    public void SendChatmessage(string text)
-    {
-        _ChatManager.SendMessageChat(text);
-    }
-
-    public async void LeaveRoom()
-    {
-        await _connection.Disconnect();
+        _connection.Disconnect();
 
         isConectVerific = true;
     }
@@ -129,19 +97,7 @@ public class ConectionManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (_connection != null)
-        {
-            isConect = _connection.IsConnected();
-        }
-
-
-        if (isConectVerific)
-        {
-            ChangeText();
-        }  
-    }
+   
 
     public void ChangeText()
     {
@@ -159,4 +115,122 @@ public class ConectionManager : MonoBehaviour
         }
 
     }
+
+    public class SocketIOConnection
+    {
+        public class SocketOptions
+        {
+            public readonly Uri Uri;
+            public readonly IdentifyData UserData;
+
+            public SocketOptions(Uri uri, IdentifyData userData)
+            {
+                Uri = uri;
+                UserData = userData;
+            }
+        }
+
+        [Serializable]
+        public class IdentifyData
+        {
+            [JsonProperty("userId")]
+            public int UserId { get; set; }
+
+            [JsonProperty("userName")]
+            public string UserName { get; set; }
+
+            [JsonProperty("jwt")]
+            public string Token { get; set; }
+        }
+        public SocketIOUnity _socket;
+
+        private Dictionary<string, Action<SocketIOResponse>> _callbacks = new Dictionary<string, Action<SocketIOResponse>>();
+
+        public SocketOptions Options { get; set; }
+
+        public Action OnConected { get; set; }
+
+        public Action OnDisconected { get; set; }
+
+        public void AddCallbacks(string nameCallback, Action<SocketIOResponse> action)
+        {
+            if (_callbacks.ContainsKey(nameCallback))
+            {
+                _callbacks[nameCallback] += action;
+            }
+            else
+            {
+                _callbacks.Add(nameCallback, action);
+            }
+        }
+
+        public void AddDictionaryCallback(Dictionary<string, Action<SocketIOResponse>> callbacks)
+        {
+            foreach (var item in callbacks)
+            {
+                _socket.On(item.Key, item.Value);
+            }
+        }
+
+        public void Conected(SocketOptions options)
+        {
+            Options = options;
+
+            _socket = new SocketIOUnity(Options.Uri, new SocketIOOptions
+            {
+                Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
+                EIO = 4,                            //^_^\\
+                Reconnection = true,                //|?|\\ Habilita reconexão automática
+                ReconnectionAttempts = 5,           //|?|\\ Número máximo de tentativas de reconexão
+                ReconnectionDelay = 1000,           //|?|\\ Atraso entre as tentativas de reconexão em milissegundos
+                ReconnectionDelayMax = 5000,        //|?|\\ Atraso máximo entre as tentativas de reconexão
+                RandomizationFactor = 0.5           //|?|\\ Fator de randomização para evitar reconexões simultâneas de vários clientes
+            });
+
+            _socket.JsonSerializer = new NewtonsoftJsonSerializer();
+
+            foreach (var item in _callbacks)
+            {
+                _socket.On(item.Key, item.Value);
+            }
+            _socket.Connect();
+
+            Idetifyed();
+        }
+
+
+        private void Idetifyed()
+        {
+            _socket.Emit("identify", Options.UserData);
+
+            if (_socket.Connected)
+                OnConected?.Invoke();
+        }
+
+        public void Disconnect()
+        {
+            _socket.DisconnectAsync();
+
+            _callbacks.Clear();
+
+            if (!_socket.Connected)
+                OnDisconected?.Invoke();
+        }
+
+        public void Emit(string name, object data)
+        {
+            _socket.Emit(name, data);
+        }
+
+        public bool IsConnected()
+        {
+            return _socket == null ? false : _socket.Connected;
+        }
+
+        public SocketOptions GetOptions()
+        {
+            return Options;
+        }
+    }
 }
+
