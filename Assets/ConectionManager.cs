@@ -1,18 +1,22 @@
+using NotificationSystem;
 using SocketIOClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using SocketIOClient.Newtonsoft.Json;
-using Newtonsoft.Json;
-using static ConectionManager.SocketIOConnection;
+using VRGlass.Essentials.Http;
+using VRGlass.SocketIO;
+using VRGlass.SocketIO.Data;
 
 public class ConectionManager : MonoBehaviour
 {
-
+    private ISocketConnection _connection;
+    private ChatManager _chat;
+    private NotificationManager _notification;
     public Text text;
     public Text textChat;
+    public Text players;
     public bool isConect;
     public bool isConectVerific;
 
@@ -21,17 +25,13 @@ public class ConectionManager : MonoBehaviour
     public string username;
     public string token;
 
-    private SocketIOConnection _connection;
-
-    public SocketIOUnity _socket;
+    //private ISocketConnection _connection;
     private Dictionary<string, Action<SocketIOResponse>> _callbacks = new Dictionary<string, Action<SocketIOResponse>>();
-
 
     private void Start()
     {
-
-        
     }
+
     private void FixedUpdate()
     {
         if (_connection != null)
@@ -40,6 +40,7 @@ public class ConectionManager : MonoBehaviour
         if (_connection != null)
         {
             ChangeText();
+            _chat.RunFixedUpdate();
 
         }
     }
@@ -56,18 +57,27 @@ public class ConectionManager : MonoBehaviour
         //Uri uri = new Uri("https://chat-atvos.virtual.town/");
         Uri uri = new Uri("https://chat-vt16.virtual.town/");
 
-        SocketIOConnection.SocketOptions options = new SocketIOConnection.SocketOptions(uri, identifyData);
+        HttpRequest.HttpOptions httpOptions = new HttpRequest.HttpOptions("pt-br", token);
 
-        _connection = new ConectionManager.SocketIOConnection();
+        SocketOptions options = new SocketOptions(uri, identifyData);
+        _connection = new SocketIOConnection();
+        _notification = new NotificationManager();
+        _chat = new ChatManager();   
+        _notification.Initialize(_connection, options, httpOptions);
         yield return new WaitForSeconds(0.1f);
-        _connection.Conected(options);
+        _connection.Conect(options);
         yield return new WaitForSeconds(0.1f);
-        AddCallbacks("message", RecebidoMessage);
+        _chat.Initialize(_connection, _callbacks);        
         _connection.AddDictionaryCallback(_callbacks);
+        _chat.MessageChatCallback += RecebidoMessage;
+        _chat.UpdateListUsersChatCallback += UpdateListUsers;
         yield return new WaitForSeconds(0.1f);
         isConectVerific = true;
+        yield return new WaitForSeconds(0.1f);
+        _chat.JoinRoom("teste", 151);
 
     }
+
     private void AddCallbacks(string nameCallback, Action<SocketIOResponse> action)
     {
         if (_callbacks.ContainsKey(nameCallback))
@@ -80,9 +90,19 @@ public class ConectionManager : MonoBehaviour
         }
     }
 
-    public void RecebidoMessage(SocketIOResponse response)
+    public void SendMessagechat()
     {
-        Debug.Log(response);
+        _chat.SendMessageChat(" Teste");
+    }
+
+    public void RecebidoMessage(MessageDataChat response)
+    {
+        Debug.Log(response.Message);
+        textChat.text += response.Message;
+    }
+    public void UpdateListUsers(List<UserChat> users)
+    {
+        players.text = "Player online : " + users.Count;
     }
     public void LeaveRoom()
     {
@@ -97,7 +117,6 @@ public class ConectionManager : MonoBehaviour
     }
 
     // Update is called once per frame
-   
 
     public void ChangeText()
     {
@@ -113,124 +132,5 @@ public class ConectionManager : MonoBehaviour
         {
             text.text = "Status OFF-Line";
         }
-
-    }
-
-    public class SocketIOConnection
-    {
-        public class SocketOptions
-        {
-            public readonly Uri Uri;
-            public readonly IdentifyData UserData;
-
-            public SocketOptions(Uri uri, IdentifyData userData)
-            {
-                Uri = uri;
-                UserData = userData;
-            }
-        }
-
-        [Serializable]
-        public class IdentifyData
-        {
-            [JsonProperty("userId")]
-            public int UserId { get; set; }
-
-            [JsonProperty("userName")]
-            public string UserName { get; set; }
-
-            [JsonProperty("jwt")]
-            public string Token { get; set; }
-        }
-        public SocketIOUnity _socket;
-
-        private Dictionary<string, Action<SocketIOResponse>> _callbacks = new Dictionary<string, Action<SocketIOResponse>>();
-
-        public SocketOptions Options { get; set; }
-
-        public Action OnConected { get; set; }
-
-        public Action OnDisconected { get; set; }
-
-        public void AddCallbacks(string nameCallback, Action<SocketIOResponse> action)
-        {
-            if (_callbacks.ContainsKey(nameCallback))
-            {
-                _callbacks[nameCallback] += action;
-            }
-            else
-            {
-                _callbacks.Add(nameCallback, action);
-            }
-        }
-
-        public void AddDictionaryCallback(Dictionary<string, Action<SocketIOResponse>> callbacks)
-        {
-            foreach (var item in callbacks)
-            {
-                _socket.On(item.Key, item.Value);
-            }
-        }
-
-        public void Conected(SocketOptions options)
-        {
-            Options = options;
-
-            _socket = new SocketIOUnity(Options.Uri, new SocketIOOptions
-            {
-                Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
-                EIO = 4,                            //^_^\\
-                Reconnection = true,                //|?|\\ Habilita reconexão automática
-                ReconnectionAttempts = 5,           //|?|\\ Número máximo de tentativas de reconexão
-                ReconnectionDelay = 1000,           //|?|\\ Atraso entre as tentativas de reconexão em milissegundos
-                ReconnectionDelayMax = 5000,        //|?|\\ Atraso máximo entre as tentativas de reconexão
-                RandomizationFactor = 0.5           //|?|\\ Fator de randomização para evitar reconexões simultâneas de vários clientes
-            });
-
-            _socket.JsonSerializer = new NewtonsoftJsonSerializer();
-
-            foreach (var item in _callbacks)
-            {
-                _socket.On(item.Key, item.Value);
-            }
-            _socket.Connect();
-
-            Idetifyed();
-        }
-
-
-        private void Idetifyed()
-        {
-            _socket.Emit("identify", Options.UserData);
-
-            if (_socket.Connected)
-                OnConected?.Invoke();
-        }
-
-        public void Disconnect()
-        {
-            _socket.DisconnectAsync();
-
-            _callbacks.Clear();
-
-            if (!_socket.Connected)
-                OnDisconected?.Invoke();
-        }
-
-        public void Emit(string name, object data)
-        {
-            _socket.Emit(name, data);
-        }
-
-        public bool IsConnected()
-        {
-            return _socket == null ? false : _socket.Connected;
-        }
-
-        public SocketOptions GetOptions()
-        {
-            return Options;
-        }
     }
 }
-
