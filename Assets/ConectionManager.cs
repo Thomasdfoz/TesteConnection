@@ -14,6 +14,7 @@ public class ConectionManager : MonoBehaviour
     private ISocketConnection _connection;
     private ChatManager _chat;
     private NotificationManager _notification;
+    public string textoEnvio;
     public Text text;
     public Text textChat;
     public Text players;
@@ -92,7 +93,7 @@ public class ConectionManager : MonoBehaviour
 
     public void SendMessagechat()
     {
-        _chat.SendMessageChat(" Teste");
+        _chat.SendMessageChat(textoEnvio);
     }
 
     public void RecebidoMessage(MessageDataChat response)

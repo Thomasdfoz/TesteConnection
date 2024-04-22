@@ -628,6 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad41c85dd40b2549bf07f164f3606ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textoEnvio: Entrei
   text: {fileID: 1144911186}
   textChat: {fileID: 2084793625}
   players: {fileID: 1710611727}
