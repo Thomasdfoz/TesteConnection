@@ -3,6 +3,7 @@ using SocketIOClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 using VRGlass.Essentials.Http;
@@ -59,36 +60,27 @@ public class ConectionManager : MonoBehaviour
         Uri uri = new Uri("https://chat-vt16.virtual.town/");
 
         HttpRequest.HttpOptions httpOptions = new HttpRequest.HttpOptions("pt-br", token);
-
-        SocketOptions options = new SocketOptions(uri, identifyData);
+        SocketCallback _socketCallback = new();
+        SocketOptions options = new SocketOptions(uri, identifyData, _socketCallback);
         _connection = new SocketIOConnection();
         _notification = new NotificationManager();
         _chat = new ChatManager();   
         _notification.Initialize(_connection, options, httpOptions);
+        _chat.Initialize(_connection, _socketCallback);        
         yield return new WaitForSeconds(0.1f);
         _connection.Conect(options);
-        yield return new WaitForSeconds(0.1f);
-        _chat.Initialize(_connection, _callbacks);        
-        _connection.AddDictionaryCallback(_callbacks);
-        _chat.MessageChatCallback += RecebidoMessage;
+        yield return new WaitForSeconds(1f);
         _chat.UpdateListUsersChatCallback += UpdateListUsers;
-        yield return new WaitForSeconds(0.1f);
-        isConectVerific = true;
-        yield return new WaitForSeconds(0.1f);
-        _chat.JoinRoom("teste", 151);
+        _chat.MessageChatCallback += RecebidoMessage;
+        _chat.JoinRoom("unity", 151);
 
     }
-
-    private void AddCallbacks(string nameCallback, Action<SocketIOResponse> action)
+    private void OnDestroy()
     {
-        if (_callbacks.ContainsKey(nameCallback))
-        {
-            _callbacks[nameCallback] += action;
-        }
-        else
-        {
-            _callbacks.Add(nameCallback, action);
-        }
+        if (_connection == null) return;
+
+        _chat.LeaveRoom();
+        _connection.Disconnect();
     }
 
     public void SendMessagechat()
@@ -107,6 +99,9 @@ public class ConectionManager : MonoBehaviour
     }
     public void LeaveRoom()
     {
+        if (_connection == null) return;
+
+        _chat.LeaveRoom();
         _connection.Disconnect();
 
         isConectVerific = true;
