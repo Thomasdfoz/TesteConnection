@@ -173,7 +173,7 @@
       "url": "https://packages.unity.com"
     },
     "com.vrglass.chatsystem": {
-      "version": "0.0.25",
+      "version": "0.0.28",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -189,7 +189,7 @@
       "url": "https://verdaccio.ftp.vrglass.com"
     },
     "com.vrglass.notifysystem": {
-      "version": "0.0.39",
+      "version": "0.0.41",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -199,7 +199,7 @@
       "url": "https://verdaccio.ftp.vrglass.com"
     },
     "com.vrglass.socketio": {
-      "version": "0.0.11",
+      "version": "0.0.13",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

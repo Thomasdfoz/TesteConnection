@@ -238,7 +238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -60, y: -356.3}
+  m_AnchoredPosition: {x: -60, y: -420}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &284176848
@@ -285,9 +285,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 697381180}
-        m_TargetAssemblyTypeName: ConectionManager, Assembly-CSharp
-        m_MethodName: SendMessagechat
+      - m_Target: {fileID: 1152795678}
+        m_TargetAssemblyTypeName: Example, Assembly-CSharp
+        m_MethodName: SendChatmessage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -439,7 +439,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -59.68, y: 53.9}
+  m_AnchoredPosition: {x: -60, y: 60}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &427315327
@@ -486,8 +486,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 697381180}
-        m_TargetAssemblyTypeName: ConectionManager, Assembly-CSharp
+      - m_Target: {fileID: 1152795678}
+        m_TargetAssemblyTypeName: Example, Assembly-CSharp
         m_MethodName: ConectedRoom
         m_Mode: 1
         m_Arguments:
@@ -547,9 +547,8 @@ GameObject:
   - component: {fileID: 697381177}
   - component: {fileID: 697381179}
   - component: {fileID: 697381178}
-  - component: {fileID: 697381180}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Buttons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -567,7 +566,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1144911185}
   - {fileID: 427315326}
   - {fileID: 732825122}
   - {fileID: 284176847}
@@ -616,27 +614,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 697381176}
   m_CullTransparentMesh: 1
---- !u!114 &697381180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 697381176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bad41c85dd40b2549bf07f164f3606ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textoEnvio: ' Entrei '
-  text: {fileID: 1144911186}
-  textChat: {fileID: 2084793625}
-  players: {fileID: 1710611727}
-  isConect: 0
-  isConectVerific: 0
-  id: 206
-  username: teste
-  token: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNDQ0ZDdhYjdiOTZmYjhkN2I5ZGE5M2Y5OWMyODU4Mzc0MmIwZGJiYmE0MGZkODlmMGJiZTdlNDQwMWUyZWFhYjUzNDI0NDhmYzg2MmQyZDIiLCJpYXQiOjE3MTA4NjQ1MzUuMTg1MzE5LCJuYmYiOjE3MTA4NjQ1MzUuMTg1MzIyLCJleHAiOjE3NDI0MDA1MzUuMTc5MDY2LCJzdWIiOiIyMDYiLCJzY29wZXMiOltdfQ.cVocUV5qhJjVVkOiolbrqxaeqFlAdsOt3GSC4OgXi6bhaqoqFUst_oo913jGbGy6rsgDev0oPUcrRgXyAuNbINsvh69H_nsBJFGTfnOMYUKWQwAjAzCTWb-0EW2PwmKo-FcAEgZi1e0aSkcbGVCAYGRXrygVLqC4-0VfnopAoaCASmHAVpwKaTlsXsugWkEVmQ-I_rHYZnJr42dm5ovFEaZUMSoUiaLgM5MLk-5FleRlzsB89dt1nJeZhRwNjSCPtYo0thH4-pI4fz3TGnPL5dWYbeAzERkZlfvc_mtjIMCL_Uu0_3YOCI510xS3mLfiYBAdHv4PSKwQFESUI6elX4X5NnA2ZiRV60-0BtjfdGKe8cr541Hi61IWoFbDQoivbCn-hMlWBKigq9dv9b-MIFZ3YK79rNaQfHt84FOkpv5PvtfIR0kDodhFjYQuOZWVV6OCzyor0Cf_XqwfPZ1DWcv1LeB9xZG_Gwip2eVtJ5uv7rcYWOu9XESgV3cM3y5VBV-5jsLJaNC-GYBAyBWSGAToIXajaz79v4Qqfaa8pLaLETIsa29FDVKfOtQw_mwPjB1_NUuNjzs7JJhp2GH9K4IRtuQb6DLZdbqGYSTiMHp3GQ9GXluwOXpPnka6CjeFEn7ZWqsKtZ27xiS3M9b6MSCxizap-yqO2oqwOhce4UM
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,7 +744,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -60, y: -187.2}
+  m_AnchoredPosition: {x: -60, y: -180}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &732825123
@@ -814,8 +791,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 697381180}
-        m_TargetAssemblyTypeName: ConectionManager, Assembly-CSharp
+      - m_Target: {fileID: 1152795678}
+        m_TargetAssemblyTypeName: Example, Assembly-CSharp
         m_MethodName: LeaveRoom
         m_Mode: 1
         m_Arguments:
@@ -1047,7 +1024,7 @@ GameObject:
   - component: {fileID: 1144911187}
   - component: {fileID: 1144911186}
   m_Layer: 5
-  m_Name: Text (Legacy) (1)
+  m_Name: status
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1060,16 +1037,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144911184}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 697381177}
+  m_Father: {fileID: 1152795677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 1.67, y: -500}
+  m_AnchoredPosition: {x: 0, y: -500}
   m_SizeDelta: {x: 800, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1144911186
@@ -1096,7 +1073,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 72
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 3
     m_MaxSize: 72
     m_Alignment: 0
@@ -1126,6 +1103,7 @@ GameObject:
   - component: {fileID: 1152795676}
   - component: {fileID: 1152795675}
   - component: {fileID: 1152795674}
+  - component: {fileID: 1152795678}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1211,6 +1189,7 @@ RectTransform:
   - {fileID: 697381177}
   - {fileID: 2084793624}
   - {fileID: 1710611726}
+  - {fileID: 1144911185}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1218,6 +1197,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1152795678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152795673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 650ae8bbfec9ff9488217183f42698e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  status: {fileID: 1144911186}
+  messageChat: {fileID: 2084793625}
+  players: {fileID: 1710611727}
+  Texto: ola mundo
+  id: 10
+  username: Thomas
+  token: 
 --- !u!1 &1676179266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1309,7 +1307,7 @@ GameObject:
   - component: {fileID: 1710611728}
   - component: {fileID: 1710611727}
   m_Layer: 5
-  m_Name: Text (Legacy) (1)
+  m_Name: players
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1329,9 +1327,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1152795677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 484.23}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -700}
   m_SizeDelta: {x: 800, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1710611727
@@ -1361,7 +1359,7 @@ MonoBehaviour:
     m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 80
-    m_Alignment: 4
+    m_Alignment: 3
     m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -1388,7 +1386,7 @@ GameObject:
   - component: {fileID: 2084793626}
   - component: {fileID: 2084793625}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: message chat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1408,10 +1406,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1152795677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 741.6}
-  m_SizeDelta: {x: 800, y: 150}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -1084.4528}
+  m_SizeDelta: {x: 800, y: 543.4371}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2084793625
 MonoBehaviour:
@@ -1439,14 +1437,14 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 10
-    m_MaxSize: 60
-    m_Alignment: 4
+    m_MaxSize: 90
+    m_Alignment: 0
     m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 'Chat:'
 --- !u!222 &2084793626
 CanvasRenderer:
   m_ObjectHideFlags: 0
